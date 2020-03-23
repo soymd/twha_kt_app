@@ -2,13 +2,15 @@ package com.example.twhaKtApp
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.util.Log
+import com.example.twhaKtApp.model.TwhaAnswerModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TwhaRepository {
 
-    public fun insertData(
+    public fun insertAnswer(
         context: Context, userId: Int, difficulty: Int, year: Int, option1: Int, option2: Int
         , option3: Int, option4: Int, selected: Int, correct: Int
     ) {
@@ -67,7 +69,8 @@ class TwhaRepository {
         // 検索するuser_idを指定
         val selectionArgs = arrayOf<String>(userId.toString())
         val cursor = database.query(
-            tableName, arrayOf("difficulty"),
+            tableName,
+            arrayOf("difficulty"),
             "user_id = ?",
             selectionArgs,
             null,
@@ -86,5 +89,60 @@ class TwhaRepository {
             database.close()
         }
         return difficulty
+    }
+
+    fun readAnswers(context: Context, userId: Int): MutableList<TwhaAnswerModel> {
+
+        var answerModelList = mutableListOf<TwhaAnswerModel>()
+
+        val dbHelper = AssetDatabaseOpenHelper(context);
+        val database = dbHelper.openDatabase()
+        val tableName = "answer"
+        // 検索するuser_idを指定
+        val selectionArgs = arrayOf<String>(userId.toString())
+        val cursor = database.query(
+            tableName,
+            null,
+            "user_id = ?",
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        try {
+            answerModelList = mapTwhaAnswerModel(cursor)
+
+        } catch (exception: Exception) {
+            Log.e("db", exception.toString())
+        } finally {
+            cursor.close()
+            database.close()
+        }
+        return answerModelList;
+    }
+
+    fun mapTwhaAnswerModel(cursor: Cursor): MutableList<TwhaAnswerModel> {
+        var next = cursor.moveToFirst()
+        var answerModelList = mutableListOf<TwhaAnswerModel>()
+
+        while (next) { // ・・・処理
+            var answerModel = TwhaAnswerModel(
+                date = (cursor.getString(0)),
+                answerId = (cursor.getInt(1)),
+                year = (cursor.getInt(2)),
+                option1 = (cursor.getInt(3)),
+                option2 = (cursor.getInt(4)),
+                option3 = (cursor.getInt(5)),
+                option4 = (cursor.getInt(6)),
+                correct = (cursor.getInt(7)),
+                difficulty = (cursor.getInt(8)),
+                selected = (cursor.getInt(9)),
+                userId = (cursor.getInt(10))
+            )
+            answerModelList.add(answerModel)
+            // 次のレコード
+            next = cursor.moveToNext()
+        }
+        return answerModelList
     }
 }

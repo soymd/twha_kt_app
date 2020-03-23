@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.twhaKtApp.view.ui.main.TwhaStatsActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         this.difficultyBtn2 = findViewById(R.id.difficulty_button_2)
         this.difficultyBtn3 = findViewById(R.id.difficulty_button_3)
 
-        val dataArray = arrayOf("The World Historical Atlas", "出題")
+        val dataArray = arrayOf("The World Historical Atlas", "出題", "統計")
         val adapter = ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1, dataArray
@@ -37,17 +38,18 @@ class MainActivity : AppCompatActivity() {
             when (position) {
                 0 -> {
                     Log.i("debug", "0")
-                    itemTextView.setOnClickListener {
-                        val intent = Intent(application, MainTwhaActivity::class.java)
-                        startActivity(intent)
-                    }
+                    val intent = Intent(application, MainTwhaActivity::class.java)
+                    startActivity(intent)
                 }
                 1 -> {
                     Log.i("debug", "1")
-                    itemTextView.setOnClickListener {
-                        val intent = Intent(application, TwhaQuestionActivity::class.java)
-                        startActivity(intent)
-                    }
+                    val intent = Intent(application, TwhaQuestionActivity::class.java)
+                    startActivity(intent)
+                }
+                2 -> {
+                    Log.i("debug", "1")
+                    val intent = Intent(application, TwhaStatsActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }

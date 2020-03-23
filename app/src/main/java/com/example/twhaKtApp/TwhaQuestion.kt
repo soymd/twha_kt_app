@@ -11,6 +11,16 @@ class TwhaQuestion {
         }
     }
 
+    fun randomYear(): Int {
+        return when (Random.nextInt(100)) {
+            //出題する年の乱数を調整
+            in 0..2 -> Random.nextInt(-4000, -1001)
+            in 3..10 -> Random.nextInt(-1000, -1)
+            //紀元0年は返さないようにする
+            else -> Random.nextInt(1, 2019)
+        }
+    }
+
     fun centuryToString(century: Int): String {
         val bcPrefix = "前"
         val suffix = "世紀"
@@ -94,7 +104,6 @@ class TwhaQuestion {
             return Random.nextInt(year1, year2)
         }
         return year1
-        
     }
 
     fun getRandomRangeByDifficulty(difficulty: Int): Int {

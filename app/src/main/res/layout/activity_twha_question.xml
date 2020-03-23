@@ -3,88 +3,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".TwhaQuestionActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <WebView
+        android:id="@+id/twhaView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:layout_height="match_parent" />
 
-        <WebView
-            android:id="@+id/twhaView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/answer_btn_array"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <Button
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_weight="0.1">
+            android:text="戻る"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_button" />
 
+        <Button
+            android:id="@+id/question_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <!--            <androidx.appcompat.widget.AppCompatEditText-->
-            <!--                android:id="@+id/century_form"-->
-            <!--                android:inputType="numberSigned"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatEditText>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/answer_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/answer_btn_array"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/answer_array"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/answer_button_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="1" />
 
-            <Button
-                android:id="@+id/answer_button_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
+        <Button
+            android:id="@+id/answer_button_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="2" />
 
-            <Button
-                android:id="@+id/answer_button_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
+        <Button
+            android:id="@+id/answer_button_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="3" />
 
-            <Button
-                android:id="@+id/answer_button_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/answer_button_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/difficulty_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/show_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/next_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="next" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
+        <Button
+            android:id="@+id/answer_button_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="4" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

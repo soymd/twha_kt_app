@@ -12,46 +12,57 @@
 
 const MAX_YEAR = 2019;
 
-const random_year = ramdomYear();
-// const random_year =  Math.floor (Math.random() * ( 2019 - (-4000)) + (-4000));
-
-
 const data = {
 	map_x: 2500,
 	map_y: 580,
-	year: random_year,
+	year: -4000,
 	zoom: 1,
 	lang: 'ja',
 };
 
-window.onload = function alertYear(){
-  alert(data.year);
+// evaluateJavascript連携用
+window.changeYear = function (num){
+  data.year = num;
+  console.log("data.year changed: " + num);
 }
 
-function ramdomYear(){
-  let random = Math.floor( Math.random() * 110 );
-  console.log(random);
-  let maxYear;
-  let minYear;
-  let year;
-  if (random > 10){
-    maxYear = 2019;
-    minYear = 1;
-  } else if (random > 2){
-    maxYear = -1;
-    minYear = -1000;
-  } else {
-    maxYear = -1001;
-    minYear = -4000;
-  }
-  
-  year =  Math.floor (Math.random() * ( maxYear - minYear) + minYear);
-  console.log(maxYear + " " + minYear);
-  if (year === 0){
-    year = 1;
-  }
+// evaluateJavascript連携用
+window.changeMap = function (x, y){
+  data.map_x = x
+  data.map_y = y
+  console.log("data.map_x changed: " + x);
+  console.log("data.map_y changed: " + y);
+}
 
-  return year;
+// evaluateJavascript連携用
+window.changeZoom = function (zoom){
+  data.zoom = zoom
+  console.log("data.zoom changed: " + zoom);
+}
+
+//evaluateJavascript連携用
+window.hideYearBar = function (){
+  let yearBar = document.getElementById("year-bar");
+  yearBar.style.display = "none"
+}
+//evaluateJavascript連携用
+window.hideYearText = function (){
+  let yearText = document.getElementById("year");
+  let yearSub = document.getElementById("year-sub");
+  yearText.style.display = "none"
+  yearSub.style.display = "none"
+}
+//evaluateJavascript連携用
+window.showYearBar = function (){
+  let yearBar = document.getElementById("year-bar");
+  yearBar.style.display = ""
+}
+//evaluateJavascript連携用
+window.showYearText = function (){
+  let yearText = document.getElementById("year");
+  let yearSub = document.getElementById("year-sub");
+  yearText.style.display = ""
+  yearSub.style.display = ""
 }
 
 </script>
@@ -61,7 +72,7 @@ function ramdomYear(){
   <script type="application/javascript" src="js/LangButton.js" defer></script>
   <script type="application/javascript" src="js/ZoomBar.js" defer></script>
   <script type="application/javascript" src="js/YearText.js" defer></script>
-  <script type="application/javascript" src="js/YearBarRandom.js" defer></script>
+  <script type="application/javascript" src="js/YearBar.js" defer></script>
   <script type="application/javascript" src="js/Region.js" defer></script>
   <script type="application/javascript" src="js/Map.js" defer></script>
   <script type="application/javascript" src="js/twha.js" defer></script>
@@ -76,17 +87,17 @@ function ramdomYear(){
     <div class="lang-button" id="lang-ja" hidden></div>
     <div class="lang-button" id="lang-en" hidden></div>
     <div class="lang-button" id="lang-zh" hidden></div>
-    <form id="year" hidden>
+    <form id="year">
       <span id="year-text"></span>
       <input type="text" id="year-input" value="" autocomplete="no">
     </form>
-    <div id="year-sub" hidden></div>
+    <div id="year-sub"></div>
   </div>
 
   <div id="layer-land"></div>
   <div id="layer-tert"></div>
   <div id="layer-info"></div>
-  <div id="year-bar" hidden>
+  <div id="year-bar">
     <img id="year-bar-cursor" src="img/year-pos.png" alt=""><img id="year-arrow-left" src="img/arrow-left.png"
       alt=""><canvas id="year-bar-scale" height="32"></canvas><img id="year-arrow-right" src="img/arrow-right.png"
       alt="">

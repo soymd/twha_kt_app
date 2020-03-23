@@ -153,4 +153,17 @@
       }
     }
   });
+
+  //evaluateJavascript連携用
+  window.updateWebView = function(){
+    resize();
+    map.update();
+    year_text.update();
+    year_bar.update();
+  }
+
+  //evaluateJavascript連携用
+  window.setYearBarHeight = function(num){
+    year_bar.SIZE = num
+  }
 });

@@ -2,20 +2,17 @@ package com.example.twhaKtApp
 
 import android.graphics.Color
 import android.os.Bundle
-import android.webkit.JsResult
-import android.webkit.WebChromeClient
+import android.view.View
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 
 class TwhaQuestionActivity : AppCompatActivity() {
 
     private lateinit var twhaWebView: WebView
-    private lateinit var nextBtn: Button
-    private lateinit var showBtn: Button
-    private lateinit var answerView: TextView
+    private lateinit var questionBtn: Button
+    private lateinit var backBtn: Button
     private lateinit var answerBtn1: Button
     private lateinit var answerBtn2: Button
     private lateinit var answerBtn3: Button
@@ -35,43 +32,82 @@ class TwhaQuestionActivity : AppCompatActivity() {
         this.answerBtn2 = findViewById(R.id.answer_button_2)
         this.answerBtn3 = findViewById(R.id.answer_button_3)
         this.answerBtn4 = findViewById(R.id.answer_button_4)
-        this.nextBtn = findViewById(R.id.next_button)
-        this.showBtn = findViewById(R.id.show_button)
-        this.answerView = findViewById(R.id.answer_view)
-
+        this.questionBtn = findViewById(R.id.question_button)
+        this.backBtn = findViewById(R.id.back_button)
         this.twhaWebView = findViewById(R.id.twhaView)
+
+        //JSを有効にしてWebViewにhtmlファイルを呼び出し
         this.twhaWebView.settings.javaScriptEnabled = true
-        this.twhaWebView.loadUrl("file:///android_asset/twhaApp/randomYear.html")
-        // jsのalert内容から表示されている年数を取得
+        this.twhaWebView.loadUrl("file:///android_asset/twhaApp/webView.html")
+
+        // DBにアクセスして難易度を取得
         this.difficulty = repository.readDifficulty(this, userId)
 
-        twhaWebView.setWebChromeClient(object : WebChromeClient() {
-            override fun onJsAlert(
-                view: WebView,
-                url: String,
-                message: String,
-                result: JsResult
-            ): Boolean {
-                year = message.toInt()
-                answerArr = tQuestion.makeRandomYearArr(year, difficulty)
-                setAnswerButtons(answerArr)
-                result.cancel()
-                return true
-            }
-        })
+        //出題ボタン
+        this.questionBtn.setOnClickListener {
+            //乱数で発生させた年号を取得
+            this.year = tQuestion.randomYear()
+            //年号から選択肢の候補を取得
+            this.answerArr = tQuestion.makeRandomYearArr(year, difficulty)
 
-        this.nextBtn.setOnClickListener {
-            twhaWebView.reload()
-            this.showBtn.text = ""
+            //年号のマップを読込 & year_barなどを非表示
+            changeYearJS(this.year)
+            hideYearBarAndText()
+            updateWebViewJS()
+
+            setAnswerButtons(this.answerArr)
+            this.backBtn.visibility = View.VISIBLE
+            this.questionBtn.text = "次へ"
+
             listOf(answerBtn1, answerBtn2, answerBtn3, answerBtn4)
                 .forEachIndexed { index, button ->
-                    button.background = nextBtn.background
+                    button.visibility = View.VISIBLE
+                    button.background = questionBtn.background
                 }
         }
-        this.showBtn.setOnClickListener {
-            showBtn.text = year.toString()
-        }
 
+        //戻るボタン
+        this.backBtn.setOnClickListener {
+            showYearBarAndText()
+            updateWebViewJS()
+            this.questionBtn.text = "出題"
+            this.backBtn.visibility = View.GONE
+            this.questionBtn.visibility = View.VISIBLE
+
+            //回答用ボタンの色を戻す & 非表示に設定
+            listOf(answerBtn1, answerBtn2, answerBtn3, answerBtn4)
+                .forEachIndexed { index, button ->
+                    button.visibility = View.INVISIBLE
+                    button.background = questionBtn.background
+                }
+        }
+    }
+
+    fun showYearBarAndText() {
+        //year_barの高さ設定をもとに戻す & year_barとyear_textのstyle.display="none"を解除
+        this.twhaWebView.evaluateJavascript("window.window.setYearBarHeight(32)", null)
+        this.twhaWebView.evaluateJavascript("window.showYearBar()", null)
+        this.twhaWebView.evaluateJavascript("window.showYearText()", null)
+    }
+
+    fun hideYearBarAndText() {
+        //year_barの高さ設定を0 & year_barとyear_textのstyle.display="none"に設定
+        this.twhaWebView.evaluateJavascript("window.window.setYearBarHeight(0)", null)
+        this.twhaWebView.evaluateJavascript("window.hideYearBar()", null)
+        this.twhaWebView.evaluateJavascript("window.hideYearText()", null)
+    }
+
+    fun updateWebViewJS() {
+        //webViewの各パーツを再読み込み
+        this.twhaWebView.evaluateJavascript("window.updateWebView()", null)
+    }
+
+    fun changeYearJS(year: Int) {
+        this.twhaWebView.evaluateJavascript("window.changeYear($year)", null)
+    }
+
+    fun changeMapJS(x: Int, y: Int) {
+        this.twhaWebView.evaluateJavascript("window.changeMap($x,$y)", null)
     }
 
     fun setAnswerButtons(answerArr: MutableList<Int>) {
@@ -86,15 +122,15 @@ class TwhaQuestionActivity : AppCompatActivity() {
 
     fun checkAnswer(btn: Button) {
         val btnYear: Int = Integer.parseInt(btn.text.toString())
-        if (year == btnYear) {
+        if (this.year == btnYear) {
             btn.setBackgroundColor(Color.GREEN)
         } else {
             btn.setBackgroundColor(Color.RED)
         }
-        putAnswer(btnYear)
+        saveAnswerData(btnYear)
     }
 
-    private fun putAnswer(btnYear: Int) {
+    private fun saveAnswerData(btnYear: Int) {
         val option1 = Integer.parseInt(answerBtn1.text.toString())
         val option2 = Integer.parseInt(answerBtn2.text.toString())
         val option3 = Integer.parseInt(answerBtn3.text.toString())
@@ -104,7 +140,7 @@ class TwhaQuestionActivity : AppCompatActivity() {
         } else {
             0
         }
-        repository.insertData(
+        repository.insertAnswer(
             this, userId, difficulty, year, option1,
             option2, option3, option4, btnYear, correct
         )
