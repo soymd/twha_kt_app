@@ -31,7 +31,7 @@
       data.year--;
     }
   };
-  
+
   //紀元0年をまたぐときの処理
   data.year_plus = function () {
     if (this.year === -1) {
@@ -106,4 +106,51 @@
   });
 
   resize();
+
+  //キーボード操作追加
+  document.addEventListener('keydown', (event) => {
+    let keyName = event.key;
+
+    // if (event.ctrlKey) {
+    //   console.log(`keydown:Ctrl + ${keyName}`);
+    // } else if (event.shiftKey) {
+    //   console.log(`keydown:Shift + ${keyName}`);
+    // } else {
+    //   console.log(`keydown:${keyName}`);
+    // }
+
+    // +1年
+    if (keyName === 'k') {
+      data.year_plus();
+      data.year_clamp();
+      year_text.update();
+      map.update();
+      year_bar.update();
+    }
+    // -1年
+    if (keyName === 'j') {
+      data.year_minus();
+      data.year_clamp();
+      year_text.update();
+      map.update();
+      year_bar.update();
+    }
+
+    // ズームイン
+    if (keyName === 'h') {
+      if (data.zoom < 4) {
+        data.zoom++;
+        zoom_bar.update();
+        map.update();
+      }
+    }
+    // ズームアウト
+    if (keyName === 'l') {
+      if (data.zoom > 0) {
+        data.zoom--;
+        zoom_bar.update();
+        map.update();
+      }
+    }
+  });
 });

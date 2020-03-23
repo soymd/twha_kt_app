@@ -38,15 +38,26 @@ class TwhaQuestionTest {
 
     @Test
     fun makeYearRandomArrTest() {
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
-        makeYearRandomArrTest1()
+
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+        makeYearRandomArrTestRandom()
+//        makeYearRandomArrTest2(0)
+        makeYearRandomArrTest2(1)
+        makeYearRandomArrTest2(1)
+        makeYearRandomArrTest2(1)
+        makeYearRandomArrTest2(1)
         makeYearRandomArrTest2(-4000)
+        makeYearRandomArrTest2(-3900)
+        makeYearRandomArrTest2(-3800)
+        makeYearRandomArrTest2(-3700)
         makeYearRandomArrTest2(2019)
+        makeYearRandomArrTest2(1919)
+        makeYearRandomArrTest2(1819)
         makeYearRandomArrTest2(-3999)
         makeYearRandomArrTest2(-4000)
         makeYearRandomArrTest2(-3999)
@@ -57,42 +68,48 @@ class TwhaQuestionTest {
         makeYearRandomArrTest2(2019)
     }
 
-    fun makeYearRandomArrTest1() {
+    fun makeYearRandomArrTestRandom() {
         var year: Int = 2000 - Random.nextInt(6000)
-        var yearArr = tQuestion.makeRandomYearArr(year)
-        println()
-        print(year)
-        print(" → ")
-        for (i in yearArr.indices) {
-            print(yearArr[i])
-            print(" ")
-            if (i < 3) {
-                var num = yearArr[i]
-                var num2 = yearArr[i + 1]
-                assertTrue(num <= num2)
-            }
-        }
-        assertTrue(yearArr[0] >= -4000)
-        assertTrue(yearArr[3] <= 2019)
-//        assertTrue(yearArr[3] - yearArr[0] <= 400)
+        makeYearRandomArrTest2(year)
     }
 
     fun makeYearRandomArrTest2(year: Int) {
-        var yearArr = tQuestion.makeRandomYearArr(year)
+        var difficulty = 1
+        var yearArr = tQuestion.makeRandomYearArr(year, difficulty)
         println()
         print(year)
-        print(" → ")
+        print(": ")
         for (i in yearArr.indices) {
             print(yearArr[i])
-            print(" ")
-            if (i < 3) {
+            print(",")
+            if (i < yearArr.count() - 1) {
                 var num = yearArr[i]
                 var num2 = yearArr[i + 1]
-                assertTrue(num <= num2)
+                assertTrue(num <= num2)//昇順になっているか
             }
         }
-        assertTrue(yearArr[0] >= -4000)
-        assertTrue(yearArr[3] <= 2019)
-        assertTrue(yearArr[3] - yearArr[0] <= 400)
+        assertTrue(yearArr.min()!! >= -4000)//最小値
+        assertTrue(yearArr.max()!! <= 2019)//最大値
+        assertTrue(yearArr.contains(year))//正答が含まれているか
+        assertTrue(!yearArr.contains(0))//0が含まれていないか
+        assertTrue(yearArr.count() == 4)//要素数が4つかどうか
+
+        val randomRange = tQuestion.getRandomRangeByDifficulty(difficulty)
+        val magnificationConst = 0.3
+        val rangeMax = (randomRange * (1 + magnificationConst)).toInt()
+        assertTrue(yearArr.last() - yearArr.first() <= rangeMax * yearArr.count() - 1)//乱数幅が正常か
+    }
+
+    @Test
+    fun getRandomRangeByDifficultyTest() {
+        getRandomRangeByDifficultyTest1(1, 120)
+        getRandomRangeByDifficultyTest1(2, 70)
+        getRandomRangeByDifficultyTest1(3, 40)
+    }
+
+    fun getRandomRangeByDifficultyTest1(difficulty: Int, expectedRandomRange: Int) {
+        val actual = tQuestion.getRandomRangeByDifficulty(difficulty)
+        val expected = expectedRandomRange
+        assertEquals(actual, expected)
     }
 }

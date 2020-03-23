@@ -75,9 +75,9 @@ function YearBar() {
   year_bar.addEventListener('mousedown', e => {
     let xpos = e.clientX;
     if (xpos < _SIZE) {
-      // data.year--;
+      data.year_minus();
     } else if (xpos > scale_width + _SIZE) {
-      // data.year++;
+      data.year_plus();
     } else {
       let yr = (xpos - 32) * 9400 / scale_width - 200;
       if (yr > 3000) {
