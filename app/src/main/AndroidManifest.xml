@@ -9,17 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".TwhaIntentService"
+            android:exported="false" />
+
         <activity android:name=".view.ui.main.TwhaStatsActivity" />
         <activity android:name=".TwhaQuestionActivity" />
         <activity android:name=".MainTwhaActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- ブロードキャストレシーバーと受け取るアクション名「MY_INTENT」を登録 -->
+        <receiver android:name=".mBroadcastReceiver">
+            <intent-filter>
+                <action android:name="TWHA_INTENT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

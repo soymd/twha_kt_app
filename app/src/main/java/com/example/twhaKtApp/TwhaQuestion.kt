@@ -31,71 +31,84 @@ class TwhaQuestion {
         }
     }
 
-    fun makeRandomYearArr(year: Int, difficulty: Int): MutableList<Int> {
-        val maxYear = 2019
-        val minYear = -4000
-        val randomRange = getRandomRangeByDifficulty(difficulty)
+    fun makeRandomYearList(year: Int, difficulty: Int): MutableList<Int> {
 
-        val magnificationConst = 0.3
-        val rangeMax = (randomRange * (1 + magnificationConst)).toInt()
-        val rangeMin = (randomRange * (1 - magnificationConst)).toInt()
+        val randomRange = getRandomRangeByDifficulty(difficulty)
+        val MAGNIFICATION_CONST = 0.3 //乱数の振れ幅
+        val rangeMax = (randomRange * (1 + MAGNIFICATION_CONST)).toInt()
+        val rangeMin = (randomRange * (1 - MAGNIFICATION_CONST)).toInt()
+        val tempYearList = makeYearList(year, rangeMin, rangeMax)
 
         // 正答を格納するインデックスを決定
         val randomIndex = Random.nextInt(3)
-        var tempArr = mutableListOf<Int>(0, 0, 0, year, 0, 0, 0)
-        tempArr[2] = tempArr[3] - Random.nextInt(rangeMin, rangeMax)
-        tempArr[1] = tempArr[2] - Random.nextInt(rangeMin, rangeMax)
-        tempArr[0] = tempArr[1] - Random.nextInt(rangeMin, rangeMax)
-        tempArr[4] = tempArr[3] + Random.nextInt(rangeMin, rangeMax)
-        tempArr[5] = tempArr[4] + Random.nextInt(rangeMin, rangeMax)
-        tempArr[6] = tempArr[5] + Random.nextInt(rangeMin, rangeMax)
 
         //乱数で回答候補に0が生じてしまった場合、1に変換
-        if (tempArr.contains(0)) {
-            tempArr[tempArr.indexOf(0)] = 1
+        if (tempYearList.contains(0)) {
+            tempYearList[tempYearList.indexOf(0)] = 1
         }
 
-        val yearArr = mutableListOf<Int>()
-        for (year in tempArr) {
+        val yearList = checkRange(tempYearList)
+        return trimYearList(yearList, randomIndex)
+    }
+
+    fun makeYearList(year: Int, rangeMin: Int, rangeMax: Int): MutableList<Int> {
+
+        val list = mutableListOf(0, 0, 0, year, 0, 0, 0)
+        list[2] = list[3] - Random.nextInt(rangeMin, rangeMax)
+        list[1] = list[2] - Random.nextInt(rangeMin, rangeMax)
+        list[0] = list[1] - Random.nextInt(rangeMin, rangeMax)
+        list[4] = list[3] + Random.nextInt(rangeMin, rangeMax)
+        list[5] = list[4] + Random.nextInt(rangeMin, rangeMax)
+        list[6] = list[5] + Random.nextInt(rangeMin, rangeMax)
+
+        return list
+    }
+
+    fun checkRange(yearList: MutableList<Int>): MutableList<Int> {
+        val maxYear = 2019
+        val minYear = -4000
+        val tempList = mutableListOf<Int>()
+
+        for (year in yearList) {
             // minYear以上maxYear以下の場合はそのまま追加
             if (year in minYear..maxYear) {
-                yearArr.add(year)
+                tempList.add(year)
             } else {
                 // minYearより小さい or maxYearより大きいの場合は0を追加
-                yearArr.add(0)
+                tempList.add(0)
             }
         }
+        return tempList
+    }
 
-        when (yearArr.count { it == 0 }) {
+    private fun trimYearList(yearList: MutableList<Int>, randomIndex: Int): MutableList<Int> =
+        when (yearList.count { it == 0 }) {
             3 -> {
-                yearArr.removeAll { it == 0 }
-                return yearArr.sorted().toMutableList()
+                yearList.removeAll { it == 0 }
+                yearList.sorted().toMutableList()
             }
             2 -> {
-                yearArr.removeAll { it == 0 }
-                return if (randomIndex < 2) {
-                    yearArr.slice(0..3).sorted().toMutableList()
+                yearList.removeAll { it == 0 }
+                if (randomIndex < 2) {
+                    yearList.slice(0..3).sorted().toMutableList()
                 } else {
-                    yearArr.slice(1..4).sorted().toMutableList()
+                    yearList.slice(1..4).sorted().toMutableList()
                 }
             }
             1 -> {
-                val tmp = yearArr.slice(randomIndex..randomIndex + 3).sorted().toMutableList()
+                val tmp = yearList.slice(randomIndex..randomIndex + 3).sorted().toMutableList()
                 if (tmp.first() == 0) {
-                    tmp[0] = yearArr[randomIndex - 1]
+                    tmp[0] = yearList[randomIndex - 1]
                 }
                 if (tmp.last() == 0) {
-                    tmp[tmp.count() - 1] = yearArr[randomIndex + 4]
+                    tmp[tmp.count() - 1] = yearList[randomIndex + 4]
                 }
-                return tmp.toMutableList()
+                tmp.toMutableList()
             }
-            0 -> {
-                return yearArr.slice(randomIndex..randomIndex + 3).sorted().toMutableList()
+            else -> {
+                yearList.slice(randomIndex..randomIndex + 3).sorted().toMutableList()
             }
         }
-        // 配列を昇順にソートして返却
-        return yearArr.sorted().toMutableList()
-    }
 
     private fun getRandomYear(year1: Int, year2: Int): Int {
         if (year1 > year2) {
@@ -106,12 +119,11 @@ class TwhaQuestion {
         return year1
     }
 
-    fun getRandomRangeByDifficulty(difficulty: Int): Int {
-        return when (difficulty) {
-            1 -> return 120
-            2 -> return 70
-            3 -> return 40
+    fun getRandomRangeByDifficulty(difficulty: Int): Int =
+        when (difficulty) {
+            1 -> 120
+            2 -> 70
+            3 -> 40
             else -> 0
         }
-    }
 }

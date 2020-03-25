@@ -37,12 +37,12 @@ class AssetDatabaseOpenHelper(private val context: Context) {
         val buffer = ByteArray(1024)
         while (`is`.read(buffer) > 0) {
             os.write(buffer)
-            Log.d("#DB", "writing>>")
+            Log.i("#DB", "writing>>")
         }
 
         os.flush()
         os.close()
         `is`.close()
-        Log.d("#DB", "completed..")
+        Log.i("#DB", "completed..")
     }
 }

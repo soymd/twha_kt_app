@@ -10,14 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 
 class TwhaQuestionActivity : AppCompatActivity() {
 
-    private lateinit var twhaWebView: WebView
-    private lateinit var questionBtn: Button
-    private lateinit var backBtn: Button
-    private lateinit var answerBtn1: Button
-    private lateinit var answerBtn2: Button
-    private lateinit var answerBtn3: Button
-    private lateinit var answerBtn4: Button
-    private lateinit var answerArr: MutableList<Int>
+    private val twhaWebView: WebView by lazy { findViewById<WebView>(R.id.twhaView) }
+    private val questionBtn: Button by lazy { findViewById<Button>(R.id.question_button) }
+    private val backBtn: Button by lazy { findViewById<Button>(R.id.back_button) }
+    private val answerBtn1: Button by lazy { findViewById<Button>(R.id.answer_button_1) }
+    private val answerBtn2: Button by lazy { findViewById<Button>(R.id.answer_button_2) }
+    private val answerBtn3: Button by lazy { findViewById<Button>(R.id.answer_button_3) }
+    private val answerBtn4: Button by lazy { findViewById<Button>(R.id.answer_button_4) }
+
+    private lateinit var answerList: MutableList<Int>
     private var year = 0
     private var userId = 1;
     private var difficulty = 1;
@@ -28,13 +29,6 @@ class TwhaQuestionActivity : AppCompatActivity() {
         val tQuestion = TwhaQuestion()
 
         setContentView(R.layout.activity_twha_question)
-        this.answerBtn1 = findViewById(R.id.answer_button_1)
-        this.answerBtn2 = findViewById(R.id.answer_button_2)
-        this.answerBtn3 = findViewById(R.id.answer_button_3)
-        this.answerBtn4 = findViewById(R.id.answer_button_4)
-        this.questionBtn = findViewById(R.id.question_button)
-        this.backBtn = findViewById(R.id.back_button)
-        this.twhaWebView = findViewById(R.id.twhaView)
 
         //JSを有効にしてWebViewにhtmlファイルを呼び出し
         this.twhaWebView.settings.javaScriptEnabled = true
@@ -48,14 +42,14 @@ class TwhaQuestionActivity : AppCompatActivity() {
             //乱数で発生させた年号を取得
             this.year = tQuestion.randomYear()
             //年号から選択肢の候補を取得
-            this.answerArr = tQuestion.makeRandomYearArr(year, difficulty)
+            this.answerList = tQuestion.makeRandomYearList(year, difficulty)
 
             //年号のマップを読込 & year_barなどを非表示
             changeYearJS(this.year)
             hideYearBarAndText()
             updateWebViewJS()
 
-            setAnswerButtons(this.answerArr)
+            setAnswerButtons(this.answerList)
             this.backBtn.visibility = View.VISIBLE
             this.questionBtn.text = "次へ"
 
@@ -110,10 +104,10 @@ class TwhaQuestionActivity : AppCompatActivity() {
         this.twhaWebView.evaluateJavascript("window.changeMap($x,$y)", null)
     }
 
-    fun setAnswerButtons(answerArr: MutableList<Int>) {
+    fun setAnswerButtons(answerList: MutableList<Int>) {
         listOf(answerBtn1, answerBtn2, answerBtn3, answerBtn4)
             .forEachIndexed { index, button ->
-                button.text = answerArr[index].toString()
+                button.text = answerList[index].toString()
                 button.setOnClickListener {
                     checkAnswer(button)
                 }

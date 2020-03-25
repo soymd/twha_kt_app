@@ -75,7 +75,7 @@ class TwhaQuestionTest {
 
     fun makeYearRandomArrTest2(year: Int) {
         var difficulty = 1
-        var yearArr = tQuestion.makeRandomYearArr(year, difficulty)
+        var yearArr = tQuestion.makeRandomYearList(year, difficulty)
         println()
         print(year)
         print(": ")
