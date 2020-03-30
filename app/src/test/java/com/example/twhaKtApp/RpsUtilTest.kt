@@ -76,10 +76,14 @@ class RpsUtilTest {
         p4(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, RpsResult.WIN)
         p4(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER, RpsResult.LOSE)
         p4(Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER, RpsResult.DRAW)
-        p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.ROCK, RpsResult.LOSE)
+        p4(Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, RpsResult.DRAW)
         p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, RpsResult.LOSE)
         p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.PAPER, RpsResult.DRAW)
-        p4(Rps.SCISSOR, Rps.ROCK, Rps.SCISSOR, Rps.PAPER, RpsResult.DRAW)
+        p4(Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, Rps.PAPER, RpsResult.WIN)
+        p4(Rps.PAPER, Rps.PAPER, Rps.PAPER, Rps.PAPER, RpsResult.DRAW)
+        p4(Rps.PAPER, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, RpsResult.DRAW)
+        p4(Rps.PAPER, Rps.ROCK, Rps.ROCK, Rps.PAPER, RpsResult.WIN)
+        p4(Rps.PAPER, Rps.SCISSOR, Rps.SCISSOR, Rps.PAPER, RpsResult.LOSE)
     }
 
     fun p4(
@@ -93,25 +97,16 @@ class RpsUtilTest {
         assertEquals(expected, actual)
     }
 
-    fun multi(vararg hands: Rps): RpsResult {
-        return rps.rpsVararg(*hands)
-    }
-
-    fun assert(expected: RpsResult, actual: RpsResult) {
-        assertEquals(expected, actual)
-    }
-
     @Test
     fun multiTest() {
-        assertEquals(
-            rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK),
-            RpsResult.DRAW
-        )
-        assertEquals(
-            rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER),
-            RpsResult.LOSE
-        )
-
+        var actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK)
+        assertEquals(RpsResult.DRAW, actual)
+        actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR)
+        assertEquals(RpsResult.WIN, actual)
+        actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER)
+        assertEquals(RpsResult.LOSE, actual)
+        actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER)
+        assertEquals(RpsResult.DRAW, actual)
     }
 
     @Test
