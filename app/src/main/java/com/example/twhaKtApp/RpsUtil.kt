@@ -17,17 +17,32 @@ class RpsUtil {
         return RpsResult.DRAW
     }
 
-    fun count(vararg hands: Rps) {
+    fun rpsVararg(vararg hands: Rps): RpsResult {
         val p1 = hands[0]
-        val opponent = hands.toMutableList().removeAt(0)
-//        val hands = mutableListOf<Rps>()
-//        if (hand.contains(Rps.ROCK)) hands.add(Rps.ROCK)
-//        if (hand.contains(Rps.SCISSOR)) hands.add(Rps.SCISSOR)
-//        if (hand.contains(Rps.PAPER)) hands.add(Rps.PAPER)
-        println(hands)
-//        val rock = hand.count { it == Rps.ROCK }
-//        val scissor = hand.count { it == Rps.SCISSOR }
-//        val paper = hand.count { it == Rps.PAPER }
-//        println("$rock, $scissor, $paper")
+        var p2: Rps = p1
+        var p3: Rps = p1
+
+        val opponent = hands.toMutableList()
+        opponent.removeAt(0)
+        print(p1.toString())
+        print(opponent.toString())
+
+
+        when (p1) {
+            Rps.ROCK -> {
+                if (opponent.contains(Rps.SCISSOR)) p2 = Rps.SCISSOR
+                if (opponent.contains(Rps.PAPER)) p3 = Rps.PAPER
+            }
+            Rps.SCISSOR -> {
+                if (opponent.contains(Rps.ROCK)) p2 = Rps.ROCK
+                if (opponent.contains(Rps.PAPER)) p3 = Rps.PAPER
+            }
+            Rps.PAPER -> {
+                if (opponent.contains(Rps.ROCK)) p2 = Rps.ROCK
+                if (opponent.contains(Rps.SCISSOR)) p3 = Rps.ROCK
+            }
+        }
+        println(rps(p1, p2, p3))
+        return rps(p1, p2, p3)
     }
 }

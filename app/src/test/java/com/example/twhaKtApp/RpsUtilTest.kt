@@ -6,6 +6,7 @@ import org.junit.Test
 
 class RpsUtilTest {
     private lateinit var rps: RpsUtil
+
     @Before
     fun setUp() {
         rps = RpsUtil()
@@ -70,34 +71,50 @@ class RpsUtilTest {
     }
 
     @Test
-    fun rpsMultiTest() {
-//        rpsMulti(Rps.PAPER, Rps.PAPER, Rps.PAPER, Rps.SCISSOR, RpsResult.LOSE)
+    fun p4Test() {
+        p4(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, RpsResult.DRAW)
+        p4(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, RpsResult.WIN)
+        p4(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER, RpsResult.LOSE)
+        p4(Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER, RpsResult.DRAW)
+        p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.ROCK, RpsResult.LOSE)
+        p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, RpsResult.LOSE)
+        p4(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.PAPER, RpsResult.DRAW)
+        p4(Rps.SCISSOR, Rps.ROCK, Rps.SCISSOR, Rps.PAPER, RpsResult.DRAW)
     }
 
-    fun rpsMulti(vararg hands: Rps, expected: RpsResult) {
-        val actual = rps.count(*hands)
+    fun p4(
+        p1: Rps,
+        p2: Rps,
+        p3: Rps,
+        p4: Rps,
+        expected: RpsResult
+    ) {
+        val actual = rps.rpsVararg(p1, p2, p3, p4)
         assertEquals(expected, actual)
+    }
+
+    fun multi(vararg hands: Rps): RpsResult {
+        return rps.rpsVararg(*hands)
+    }
+
+    fun assert(expected: RpsResult, actual: RpsResult) {
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun multiTest() {
+        assertEquals(
+            rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK),
+            RpsResult.DRAW
+        )
+        assertEquals(
+            rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER),
+            RpsResult.LOSE
+        )
 
     }
 
     @Test
     fun hoge() {
-        println(0 shl 0)
-        println(2 shl 0)
-        println(0 shl 1)
-        println(2 shl 1)
-        println(0 shl 2)
-        println(2 shl 2)
-        println(0 shl 3)
-        println(2 shl 3)
-        println(0 shl 4)
-        println(2 shl 4)
-        println(0 shl 5)
-        println(2 shl 5)
-    }
-
-    infix fun shl(x: Int): Int {
-        val y = x + 4
-        return y * 2
     }
 }
