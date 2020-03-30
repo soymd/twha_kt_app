@@ -9,7 +9,7 @@ class TwhaStatsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twha_stats)
         supportFragmentManager.beginTransaction().replace(
-            R.id.container_main_fragment,
+            R.id.container_stats_fragment,
             StatsFragment()
         ).commit()
     }
