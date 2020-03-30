@@ -27,7 +27,6 @@ class RpsUtil {
         print(p1.toString())
         print(opponent.toString())
 
-
         when (p1) {
             Rps.ROCK -> {
                 if (opponent.contains(Rps.SCISSOR)) p2 = Rps.SCISSOR
@@ -42,7 +41,8 @@ class RpsUtil {
                 if (opponent.contains(Rps.SCISSOR)) p3 = Rps.ROCK
             }
         }
-        println(rps(p1, p2, p3))
-        return rps(p1, p2, p3)
+        val result = rps(p1, p2, p3)
+        println(result)
+        return result
     }
 }
