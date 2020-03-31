@@ -99,7 +99,8 @@ class RpsUtilTest {
 
     @Test
     fun multiTest() {
-        var actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK)
+        var actual: RpsResult
+        actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK)
         assertEquals(RpsResult.DRAW, actual)
         actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR)
         assertEquals(RpsResult.WIN, actual)
@@ -107,9 +108,41 @@ class RpsUtilTest {
         assertEquals(RpsResult.LOSE, actual)
         actual = rps.rpsVararg(Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER)
         assertEquals(RpsResult.DRAW, actual)
+
+        actual = rps.rpsVararg(Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR)
+        assertEquals(RpsResult.DRAW, actual)
+        actual = rps.rpsVararg(Rps.SCISSOR, Rps.PAPER, Rps.PAPER, Rps.SCISSOR, Rps.PAPER)
+        assertEquals(RpsResult.WIN, actual)
+        actual = rps.rpsVararg(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.ROCK)
+        assertEquals(RpsResult.LOSE, actual)
+        actual = rps.rpsVararg(Rps.SCISSOR, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER)
+        assertEquals(RpsResult.DRAW, actual)
+
+        actual = rps.rpsVararg(Rps.PAPER, Rps.PAPER, Rps.PAPER, Rps.PAPER, Rps.PAPER)
+        assertEquals(RpsResult.DRAW, actual)
+        actual = rps.rpsVararg(Rps.PAPER, Rps.ROCK, Rps.ROCK, Rps.ROCK, Rps.PAPER)
+        assertEquals(RpsResult.WIN, actual)
+        actual = rps.rpsVararg(Rps.PAPER, Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR, Rps.SCISSOR)
+        assertEquals(RpsResult.LOSE, actual)
+        actual = rps.rpsVararg(Rps.PAPER, Rps.ROCK, Rps.ROCK, Rps.SCISSOR, Rps.PAPER)
+        assertEquals(RpsResult.DRAW, actual)
+
     }
 
     @Test
     fun hoge() {
+        val hoge = A(3)
+        print(hoge.y)
     }
+
+    open class A(x: Int) {
+        open val y: Int = x
+    }
+
+    interface B {}
+
+    val ab: A = object : A(1), B {
+        override val y = 15
+    }
+
 }

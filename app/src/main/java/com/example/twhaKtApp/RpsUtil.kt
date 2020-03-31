@@ -38,7 +38,7 @@ class RpsUtil {
             }
             Rps.PAPER -> {
                 if (opponent.contains(Rps.ROCK)) p2 = Rps.ROCK
-                if (opponent.contains(Rps.SCISSOR)) p3 = Rps.ROCK
+                if (opponent.contains(Rps.SCISSOR)) p3 = Rps.SCISSOR
             }
         }
         val result = rps(p1, p2, p3)
